@@ -18,6 +18,8 @@ package weather
 
 import (
 	"context"
+	"github.com/eliona-smart-building-assistant/go-eliona/assets"
+	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
 	"time"
 	"weather/api"
@@ -48,10 +50,10 @@ func StartCollectingData() {
 // Input is a structure holds input data getting from the api endpoint. This structure corresponds
 // to the input heap data in eliona.
 type Input struct {
-	Humidity      int `json:"daytime"`
-	Precipitation int `json:"precipitation"`
-	Wind          int `json:"wind"`
-	Temperature   int `json:"temperature"`
+	Humidity      int     `json:"daytime"`
+	Precipitation int     `json:"precipitation"`
+	Wind          float64 `json:"wind"`
+	Temperature   float64 `json:"temperature"`
 }
 
 // Info is a structure holds informational data getting from the api endpoint. This structure corresponds
@@ -70,11 +72,25 @@ func collectData() {
 	locations := make(chan conf.Location)
 	go conf.ReadLocations(locations)
 	for location := range locations {
+
+		// Reads the current weather condition for location
 		condition, err := api.Today(location.Location)
 		if err != nil {
 			log.Error("Weather", "Error during requesting API endpoint: %v", err)
-		} else {
-			log.Info("Weather", "%s: %f °C", location.Location, condition.Temperature)
+			return
 		}
+		log.Debug("Weather", "New condition for location '%s' found: %s", location.Location, condition.Comment)
+
+		var inputHeap assets.Heap[Input]
+		inputHeap.Subtype = assets.InputSubtype
+		inputHeap.TimeStamp = time.Now()
+		inputHeap.AssetId = location.AssetId
+		inputHeap.Data = Input{
+			Temperature:   condition.Temperature,
+			Wind:          condition.Wind,
+			Humidity:      condition.Humidity,
+			Precipitation: condition.Precipitation,
+		}
+		assets.UpsertHeap(db.Pool(), inputHeap)
 	}
 }
