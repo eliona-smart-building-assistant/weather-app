@@ -59,7 +59,7 @@ The weather app grabs weather conditions from [WeatherDB](https://weatherdbi.her
 ```json
 {"wind": 6, "humidity": 97, "temperature": 18, "precipitation": 15} 
 {"daytime": "Monday 8:00 AM"}
-Status {"comment": "Mostly cloudy"}
+{"comment": "Mostly cloudy"}
 ```
 
 In eliona these heaps are handled as `weather_location` asset type with appropriate attributes created during the [initialization](database/init.sql).
