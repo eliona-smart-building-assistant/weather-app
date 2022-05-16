@@ -58,7 +58,7 @@ func Today(location string) (Conditions, error) {
 	conditions.Humidity, _ = strconv.Atoi(strings.Replace(result["currentConditions"].(map[string]interface{})["humidity"].(string), "%", "", -1))
 	conditions.Wind, _ = result["currentConditions"].(map[string]interface{})["wind"].(map[string]interface{})["km"].(float64)
 	conditions.Comment, _ = result["currentConditions"].(map[string]interface{})["comment"].(string)
-	conditions.Daytime, _ = result["currentConditions"].(map[string]interface{})["comment"].(string)
+	conditions.Daytime, _ = result["currentConditions"].(map[string]interface{})["dayhour"].(string)
 	return conditions, nil
 }
 

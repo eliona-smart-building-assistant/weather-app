@@ -21,7 +21,7 @@ import (
 	"github.com/eliona-smart-building-assistant/go-eliona/common"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
-	"sync"
+	"weather/conf"
 	"weather/weather"
 )
 
@@ -30,6 +30,9 @@ import (
 // externally, e.g. during a shut-down of the eliona environment.
 func main() {
 	log.Info("Weather", "Starting the app.")
+
+	// Necessary to close used database resources, because db.Pool() is used in this app.
+	defer db.ClosePool()
 
 	// Init the app for the first run.
 	apps.Init(db.Pool(), common.AppName(),
@@ -48,18 +51,12 @@ func main() {
 		},
 	)
 
-	var waitGroup sync.WaitGroup
-	waitGroup.Add(1)
-	defer db.ClosePool()
-
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap
 	// back to the eliona environment.
-	go func() {
-		weather.StartCollectingData()
-		waitGroup.Done()
-	}()
+	apps.StartServices(
+		apps.LoopService(weather.CollectData, conf.PollingInterval()),
+	)
 
-	waitGroup.Wait()
 	log.Info("Weather", "Terminate the app.")
 }

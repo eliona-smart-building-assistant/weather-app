@@ -17,7 +17,6 @@
 package weather
 
 import (
-	"context"
 	"github.com/eliona-smart-building-assistant/go-eliona/assets"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
@@ -25,27 +24,6 @@ import (
 	"weather/api"
 	"weather/conf"
 )
-
-// StartCollectingData starts an infinite loop to periodically collect data for weather locations.
-func StartCollectingData() {
-	log.Info("Weather", "Start service for collecting weather locations.")
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	for {
-
-		// Collecting data for all configured weather locations. This method is called periodically
-		// until the context is done.
-		collectData()
-
-		select {
-		case <-time.After(conf.PollingInterval()):
-		case <-ctx.Done():
-			log.Info("Weather", "Finish collecting data for weather locations.")
-			return
-		}
-	}
-}
 
 // Input is a structure holds input data getting from the api endpoint. This structure corresponds
 // to the input heap data in eliona.
@@ -68,7 +46,9 @@ type Status struct {
 	Comment string `json:"comment"`
 }
 
-func collectData() {
+// CollectData reads the defined weather location from configuration and writes the data as eliona heap
+func CollectData() {
+
 	locations := make(chan conf.Location)
 	go conf.ReadLocations(locations)
 	for location := range locations {
@@ -81,16 +61,35 @@ func collectData() {
 		}
 		log.Debug("Weather", "New condition for location '%s' found: %s", location.Location, condition.Comment)
 
-		var inputHeap assets.Heap[Input]
-		inputHeap.Subtype = assets.InputSubtype
-		inputHeap.TimeStamp = time.Now()
-		inputHeap.AssetId = location.AssetId
-		inputHeap.Data = Input{
+		// Writes input data as heap
+		upsertHeap(assets.StatusSubtype, location.AssetId, Input{
 			Temperature:   condition.Temperature,
 			Wind:          condition.Wind,
 			Humidity:      condition.Humidity,
 			Precipitation: condition.Precipitation,
-		}
-		assets.UpsertHeap(db.Pool(), inputHeap)
+		})
+
+		// Writes info data as heap
+		upsertHeap(assets.InfoSubtype, location.AssetId, Info{
+			Daytime: condition.Daytime,
+		})
+
+		// Writes status data as heap
+		upsertHeap(assets.StatusSubtype, location.AssetId, Status{
+			Comment: condition.Comment,
+		})
+	}
+}
+
+func upsertHeap[T any](subtype assets.HeapSubtype, assetId int, data T) {
+	var statusHeap assets.Heap[T]
+	statusHeap.Subtype = subtype
+	statusHeap.TimeStamp = time.Now()
+	statusHeap.AssetId = assetId
+	statusHeap.Data = data
+	err := assets.UpsertHeap(db.Pool(), statusHeap)
+	if err != nil {
+		log.Error("Weather", "Error during writing heap: %v", err)
+		return
 	}
 }
