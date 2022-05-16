@@ -14,8 +14,8 @@
 --  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
--- This script (database/init.sql) is called once when the app starts first time within an eliona environment.
--- Put there all initialisations need for this app. For changing installed apps use patch scripts (database/patches/*.sql).
+-- This script is called by apps.Init() before the app is launched for the first time. After that,
+-- the execution of this script is skipped.
 
 -- Creates a schema named like the app within the eliona database.
 -- All persistent and configurable data needed by the app should be located in this schema.
@@ -48,7 +48,6 @@ insert into public.attribute_schema (asset_type, attribute_type, attribute, subt
     ('weather_location', 'weather', 'precipitation', '', true, '{"de": "Niederschlag", "en": "Precipitation"}', '%', 0, 'avg', '{M15,H1,DAY}', true, true),
     ('weather_location', 'weather', 'wind', '', true, '{"de": "Wind", "en": "Wind"}', 'km/h', 0, 'avg', '{M15,H1,DAY}', true, true),
     ('weather_location', 'temperature', 'temperature', '', true, '{"de": "Temperatur", "en": "Temperature"}', '°C', 0, 'avg', '{M15,H1,DAY}', true, true),
-    ('weather_location', 'weather', 'comment', 'status', true, '{"de": "Kommentar", "en": "Comment"}', null, null, null, null, true, true),
-    ('weather_location', null, 'daytime', 'info', true, '{"de": "Tageszeit", "en": "Daytime"}', null, null, null, null, true, true)
+    ('weather_location', 'weather', 'comment', 'status', true, '{"de": "Kommentar", "en": "Comment"}', null, null, null, null, true, true)
     on conflict do nothing;
 

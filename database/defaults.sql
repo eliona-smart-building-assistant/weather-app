@@ -14,6 +14,9 @@
 --  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+-- This script is called by apps.Init() before the app is launched for the first time. After that,
+-- the execution of this script is skipped.
+
 -- A good practice is to initialize the app configuration with default values and create visual elements for the eliona
 -- frontend. So the user can see how this app works and what can be done and what needs to be configured.
 

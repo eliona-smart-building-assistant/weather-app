@@ -14,17 +14,10 @@
 --  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
--- Patch scripts (database/patches/*.sql) are generally executed in alphabetical order when the app starts within
--- an eliona environment. If the app starts for the first time, the patch scripts runs after the initialisation
--- script (database/init.sql). So changes on data and data structure can be done, although the app is
--- already installed and initialized (the database/init.sql is already executed). To signal that the
--- patch is already installed, you have to register the patch with versioning.register_patch(). Afterwards
--- the eliona environment skips execution for the corresponding patch file.
+-- This script (database/init.sql) is called by main.go before the app is launched for the first time. After that,
+-- the execution of this script is skipped.
 
--- begin;
---     -- do something for the patch
---
---     -- Register the patch prevents the eliona environment to start the script a second time.
---     -- For registered patches the environment skips the execution for the corresponding patch file.
---     select versioning.register_patch('010100', null, null, 'weather');
--- commit;
+-- Add a new attribute to structuring data stored by weather locations
+insert into public.attribute_schema (asset_type, attribute_type, attribute, subtype, enable, translation, unit, scale, pipeline_mode, pipeline_raster, viewer, ar) values
+('weather_location', null, 'daytime', 'info', true, '{"de": "Tageszeit", "en": "Daytime"}', null, null, null, null, true, true)
+on conflict do nothing;

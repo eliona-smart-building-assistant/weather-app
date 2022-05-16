@@ -34,7 +34,7 @@ func main() {
 	// Necessary to close used database resources, because db.Pool() is used in this app.
 	defer db.ClosePool()
 
-	// Init the app for the first run.
+	// Init the app before the first run.
 	apps.Init(db.Pool(), common.AppName(),
 		apps.ExecSqlFile("database/init.sql"),
 		apps.ExecSqlFile("database/defaults.sql"))
