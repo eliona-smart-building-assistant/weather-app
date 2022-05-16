@@ -57,10 +57,9 @@ Before the locations can be inserted the corresponding asset have to create. The
 The weather app grabs weather conditions from [WeatherDB](https://weatherdbi.herokuapp.com/) web service and writes these data to eliona as heap data of assets. The heap data is separated in `weather.Input`, `weather.Info` and `weather.Status` heaps. These structures are used to write the heap data.
 
 ```json
-/* Example data */ 
-{"wind": 6, "humidity": 97, "temperature": 18, "precipitation": 15} // Input 
-{"daytime": "Monday 8:00 AM"} // Info 
-{"comment": "Mostly cloudy"} // Status 
+{"wind": 6, "humidity": 97, "temperature": 18, "precipitation": 15} 
+{"daytime": "Monday 8:00 AM"}
+Status {"comment": "Mostly cloudy"}
 ```
 
 In eliona these heaps are handled as `weather_location` asset type with appropriate attributes created during the [initialization](database/init.sql).
