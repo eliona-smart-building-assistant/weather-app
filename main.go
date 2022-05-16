@@ -17,6 +17,8 @@
 package main
 
 import (
+	"github.com/eliona-smart-building-assistant/go-eliona/apps"
+	"github.com/eliona-smart-building-assistant/go-eliona/common"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
 	"sync"
@@ -28,6 +30,24 @@ import (
 // externally, e.g. during a shut-down of the eliona environment.
 func main() {
 	log.Info("Weather", "Starting the app.")
+
+	// Init the app for the first run.
+	apps.Init(db.Pool(), common.AppName(),
+		func(connection db.Connection) error {
+			return db.ExecFile(connection, "database/init.sql")
+		},
+		func(connection db.Connection) error {
+			return db.ExecFile(connection, "database/defaults.sql")
+		},
+	)
+
+	// Patch the app 010100
+	apps.Patch(db.Pool(), common.AppName(), "010100",
+		func(connection db.Connection) error {
+			return db.ExecFile(connection, "database/patches/010100.sql")
+		},
+	)
+
 	var waitGroup sync.WaitGroup
 	waitGroup.Add(1)
 	defer db.ClosePool()

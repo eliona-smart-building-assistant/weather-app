@@ -52,6 +52,3 @@ insert into public.attribute_schema (asset_type, attribute_type, attribute, subt
     ('weather_location', null, 'daytime', 'info', true, '{"de": "Tageszeit", "en": "Daytime"}', null, null, null, null, true, true)
     on conflict do nothing;
 
--- A good practice is to initialize the app configuration with default values and create visual elements for the eliona
--- frontend. So the user can see how this app works, what can be done and what needs to be configured.
-\ir defaults.sql
