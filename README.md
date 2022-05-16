@@ -3,7 +3,7 @@ The [weather app](https://github.com/eliona-smart-building-assistant/weather-app
 
 This app grabs weather data from [WeatherDB](https://weatherdbi.herokuapp.com/) web service this data to eliona. To do this, you can configure locations for which the weather data is to be read. Within eliona these locations are handled as assets and can be used to show on dashboards, trigger alarms and so on.
 
-[<center><img src="weather-app.png" width="350" /></center>](weather-app.png)
+[<img src="weather-app.png" width="350"/>](weather-app.png)
 
 ## Configuration ##
 
@@ -37,7 +37,7 @@ A good practice is to initialize the app configuration with [default values](dat
 
 In detail, you need the following configuration data in table `weather.configuration (name, value)`.
 
-```postgresql
+```sql
 -- weather.configuration (name, value)
 ('endpoint', 'https://weatherdbi.herokuapp.com/data/weather/') -- where is the weatherDB located
 ('polling_interval', '10') -- with interval in seconds is used to poll the weatherDB 
@@ -47,7 +47,7 @@ In order to define the weather locations for which conditions are to be read, an
 
 Before the locations can be inserted the corresponding asset have to create. The id of this can now use to configure the location.
 
-```postgresql
+```sql
 -- weather.locations (location, asset_id)
 ('winterthur', 4711) -- define Winterthur as location and map with eliona asset 4711
 ```
@@ -57,7 +57,7 @@ Before the locations can be inserted the corresponding asset have to create. The
 The weather app grabs weather conditions from [WeatherDB](https://weatherdbi.herokuapp.com/) web service and writes these data to eliona as heap data of assets. The heap data is separated in `weather.Input`, `weather.Info` and `weather.Status` heaps. These structures are used to write the heap data.
 
 ```json
-// Example data: 
+/* Example data */ 
 {"wind": 6, "humidity": 97, "temperature": 18, "precipitation": 15} // Input 
 {"daytime": "Monday 8:00 AM"} // Info 
 {"comment": "Mostly cloudy"} // Status 
