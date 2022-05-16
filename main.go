@@ -36,20 +36,12 @@ func main() {
 
 	// Init the app for the first run.
 	apps.Init(db.Pool(), common.AppName(),
-		func(connection db.Connection) error {
-			return db.ExecFile(connection, "database/init.sql")
-		},
-		func(connection db.Connection) error {
-			return db.ExecFile(connection, "database/defaults.sql")
-		},
-	)
+		apps.ExecSqlFile("database/init.sql"),
+		apps.ExecSqlFile("database/defaults.sql"))
 
 	// Patch the app 010100
 	apps.Patch(db.Pool(), common.AppName(), "010100",
-		func(connection db.Connection) error {
-			return db.ExecFile(connection, "database/patches/010100.sql")
-		},
-	)
+		apps.ExecSqlFile("database/patches/010100.sql"))
 
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap
