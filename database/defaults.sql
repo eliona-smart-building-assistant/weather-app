@@ -20,8 +20,8 @@
 -- Default configuration values.
 -- This table should be made editable by eliona frontend.
 insert into weather.configuration (name, value) values
-    ('endpoint', 'https://weatherdbi.herokuapp.com/data/weather/'),
-    ('polling_interval', '10')
+    ('endpoint', 'https://weatherdbi.herokuapp.com/data/weather/'), -- where is the weatherDB located
+    ('polling_interval', '10') -- with interval in seconds is used to poll the weatherDB
     on conflict (name) do update set value = excluded.value;
 
 -- Example assets for weather locations in Switzerland.

@@ -28,7 +28,7 @@ import (
 // Input is a structure holds input data getting from the api endpoint. This structure corresponds
 // to the input heap data in eliona.
 type Input struct {
-	Humidity      int     `json:"daytime"`
+	Humidity      int     `json:"humidity"`
 	Precipitation int     `json:"precipitation"`
 	Wind          float64 `json:"wind"`
 	Temperature   float64 `json:"temperature"`
@@ -62,7 +62,7 @@ func CollectData() {
 		log.Debug("Weather", "New condition for location '%s' found: %s", location.Location, condition.Comment)
 
 		// Writes input data as heap
-		upsertHeap(assets.StatusSubtype, location.AssetId, Input{
+		upsertHeap(assets.InputSubtype, location.AssetId, Input{
 			Temperature:   condition.Temperature,
 			Wind:          condition.Wind,
 			Humidity:      condition.Humidity,

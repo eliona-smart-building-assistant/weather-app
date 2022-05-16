@@ -27,6 +27,5 @@ FROM alpine:3.15 AS target
 COPY --from=build /app ./
 COPY database ./database
 
-ENV APPNAME=weather
 ENV TZ=Europe/Zurich
 CMD [ "/app" ]
