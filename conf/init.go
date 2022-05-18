@@ -13,17 +13,16 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package initialization
+package conf
 
 import (
 	"github.com/eliona-smart-building-assistant/go-eliona/assets"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
-	"weather/conf"
 )
 
-// Assets adds example assets for weather locations in Switzerland.
+// InitAssets adds example assets for weather locations in Switzerland.
 // This should be made editable by eliona frontend.
-func Assets(connection db.Connection) error {
+func InitAssets(connection db.Connection) error {
 	id := assets.UpsertAsset(connection, assets.Asset{ProjectId: defaultProjectId(connection), GlobalAssetIdentifier: "Winterthur, Schweiz", Description: "Winterthur, Schweiz", Name: "Winterthur", Latitude: 47.5056400, Longitude: 8.7241300, AssetTypeId: "weather_location"})
 	_ = insertLocation(connection, id, "winterthur")
 	id = assets.UpsertAsset(connection, assets.Asset{ProjectId: defaultProjectId(connection), GlobalAssetIdentifier: "Zürich, Schweiz", Description: "Zürich, Schweiz", Name: "Zürich", Latitude: 47.3666700, Longitude: 8.5500000, AssetTypeId: "weather_location"})
@@ -33,9 +32,9 @@ func Assets(connection db.Connection) error {
 	return nil
 }
 
-func Configuration(connection db.Connection) error {
-	_ = conf.Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
-	_ = conf.Set("polling_interval", "10")
+func InitConfiguration(connection db.Connection) error {
+	_ = Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	_ = Set("polling_interval", "10")
 	return nil
 }
 

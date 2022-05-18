@@ -49,7 +49,9 @@ type Status struct {
 func CollectData() {
 
 	locations := make(chan conf.Location)
-	go conf.ReadLocations(locations)
+	go func() {
+		_ = conf.ReadLocations(locations)
+	}()
 	for location := range locations {
 
 		// Reads the current weather condition for location

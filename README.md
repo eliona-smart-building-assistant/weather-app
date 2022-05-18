@@ -33,7 +33,7 @@ export LOG_LEVEL=debug # This is optionally, default is info
 
 The app requires some configuration data that remains in the database. To do this, the app creates its own database schema `weather` during initialization. The data in this schema should be made editable by eliona frontend. This allows the app to be configured by the user without direct database access.
 
-A good practice is to initialize the app configuration with [default values](initialization/defaults.sql). This allows the user to see how what needs to be configured.
+A good practice is to initialize the app configuration with [default values](sql/defaults.sql). This allows the user to see how what needs to be configured.
 
 In detail, you need the following configuration data in table `weather.configuration (name, value)`.
 

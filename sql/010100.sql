@@ -13,7 +13,7 @@
 --  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 --  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
--- This script (init/initialization.sql) is called by main.go before the app is launched for the first time. After that,
+-- This script (init/sql.sql) is called by main.go before the app is launched for the first time. After that,
 -- the execution of this script is skipped.
 
 -- Add a new attribute to structuring data stored by weather locations
