@@ -27,29 +27,37 @@ type Location struct {
 }
 
 // ReadLocations reads all configured weather locations and send each location to the given channel
-func ReadLocations(locations chan Location) {
-	db.Query(db.Pool(), "select location, asset_id from weather.locations", locations)
+func ReadLocations(locations chan Location) error {
+	return db.Query(db.Pool(), "select location, asset_id from weather.locations", locations)
 }
 
 // PollingInterval returns the interval polling the weather api
 func PollingInterval() time.Duration {
-	interval, _ := strconv.Atoi(value("polling_interval", "10"))
+	interval, _ := strconv.Atoi(get("polling_interval", "10"))
 	return time.Duration(interval) * time.Second
 }
 
 // Endpoint returns the configured API endpoint to get weather data.
 func Endpoint() string {
-	return value("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	return get("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
 }
 
-// Value returns the configuration string referenced by key. The configuration is stored in the database
+// Value returns the configuration string referenced by key. The configuration is stored in the init
 // table weather.configuration. This table should be configurable via the eliona frontend.
-func value(name string, fallback string) string {
+func get(name string, fallback string) string {
 	valueChan := make(chan string)
-	go db.Query(db.Pool(), "select value from weather.configuration where name = $1", valueChan, name)
+	go func() {
+		_ = db.Query(db.Pool(), "select value from weather.configuration where name = $1", valueChan, name)
+	}()
 	value := <-valueChan
 	if len(value) == 0 {
 		return fallback
 	}
 	return value
+}
+
+// Value returns the configuration string referenced by key. The configuration is stored in the init
+// table weather.configuration. This table should be configurable via the eliona frontend.
+func Set(name string, value string) error {
+	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) update set value = excluded.value", name, value)
 }

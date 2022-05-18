@@ -16,7 +16,7 @@
 -- This script is called by apps.Init() before the app is launched for the first time. After that,
 -- the execution of this script is skipped.
 
--- Creates a schema named like the app within the eliona database.
+-- Creates a schema named like the app within the eliona init.
 -- All persistent and configurable data needed by the app should be located in this schema.
 create schema if not exists weather;
 

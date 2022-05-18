@@ -21,6 +21,7 @@ import (
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
 	"weather/conf"
+	"weather/init"
 	"weather/weather"
 )
 
@@ -30,17 +31,18 @@ import (
 func main() {
 	log.Info("Weather", "Starting the app.")
 
-	// Necessary to close used database resources, because db.Pool() is used in this app.
+	// Necessary to close used init resources, because db.Pool() is used in this app.
 	defer db.ClosePool()
 
 	// Init the app before the first run.
 	apps.Init(db.Pool(), common.AppName(),
-		apps.ExecSqlFile("database/init.sql"),
-		apps.ExecSqlFile("database/defaults.sql"))
+		apps.ExecSqlFile("init/init.sql"),
+		init.Configuration,
+		init.Assets)
 
 	// Patch the app 010100
 	apps.Patch(db.Pool(), common.AppName(), "010100",
-		apps.ExecSqlFile("database/patches/010100.sql"))
+		apps.ExecSqlFile("init/010100.sql"))
 
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap
