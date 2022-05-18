@@ -1,6 +1,5 @@
 //  This file is part of the eliona project.
 //  Copyright © 2022 LEICOM iTEC AG. All Rights Reserved.
-//  Authors: Adam Lange, et al.
 //  ______ _ _
 // |  ____| (_)
 // | |__  | |_  ___  _ __   __ _
