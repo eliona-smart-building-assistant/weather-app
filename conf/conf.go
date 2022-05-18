@@ -59,5 +59,5 @@ func get(name string, fallback string) string {
 // Value returns the configuration string referenced by key. The configuration is stored in the init
 // table weather.configuration. This table should be configurable via the eliona frontend.
 func Set(name string, value string) error {
-	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) update set value = excluded.value", name, value)
+	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
 }

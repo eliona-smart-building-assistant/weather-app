@@ -24,7 +24,7 @@ RUN go build -o ../app
 FROM alpine:3.15 AS target
 
 COPY --from=build /app ./
-COPY init ./database
+COPY initialization ./database
 
 ENV TZ=Europe/Zurich
 CMD [ "/app" ]
