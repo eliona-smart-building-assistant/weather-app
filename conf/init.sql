@@ -20,6 +20,9 @@
 -- All persistent and configurable data needed by the app should be located in this schema.
 create schema if not exists weather;
 
+-- Committing schema creation because this cannot be wrapped inside transactions
+commit;
+
 -- Create a table for global configuration like endpoints, secrets and so on.
 -- This table should be made editable by eliona frontend.
 create table if not exists weather.configuration
@@ -35,18 +38,3 @@ create table if not exists weather.locations
     location text not null,
     asset_id integer unique references public.asset(asset_id) on delete cascade primary key
 );
-
--- Create asset type for weather locations
-insert into public.asset_type (asset_type, vendor, translation, urldoc, icon) values
-    ('weather_location', 'weatherDB by Dron Bhattacharya & Rituraj Datta', '{"de": "Wetterstandort", "en": "Weather location"}', 'https://weatherdbi.herokuapp.com/documentation/v1', 'weather')
-    on conflict(asset_type) do update set vendor = excluded.vendor, translation = excluded.translation, urldoc = excluded.urldoc, icon = excluded.icon;
-
--- Create attributes to structuring data stored by weather locations
-insert into public.attribute_schema (asset_type, attribute_type, attribute, subtype, enable, translation, unit, scale, pipeline_mode, pipeline_raster, viewer, ar) values
-    ('weather_location', 'humidity', 'humidity', '', true, '{"de": "Luftfeuchte", "en": "Humidity"}', '%', 0, 'avg', '{M15,H1,DAY}', true, true),
-    ('weather_location', 'weather', 'precipitation', '', true, '{"de": "Niederschlag", "en": "Precipitation"}', '%', 0, 'avg', '{M15,H1,DAY}', true, true),
-    ('weather_location', 'weather', 'wind', '', true, '{"de": "Wind", "en": "Wind"}', 'km/h', 0, 'avg', '{M15,H1,DAY}', true, true),
-    ('weather_location', 'temperature', 'temperature', '', true, '{"de": "Temperatur", "en": "Temperature"}', '°C', 0, 'avg', '{M15,H1,DAY}', true, true),
-    ('weather_location', 'weather', 'comment', 'status', true, '{"de": "Kommentar", "en": "Comment"}', null, null, null, null, true, true)
-    on conflict do nothing;
-

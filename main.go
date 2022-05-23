@@ -35,13 +35,16 @@ func main() {
 
 	// Init the app before the first run.
 	apps.Init(db.Pool(), common.AppName(),
-		apps.ExecSqlFile("sql/schema.sql"),
+		apps.ExecSqlFile("conf/init.sql"),
 		conf.InitConfiguration,
-		conf.InitAssets)
+		conf.InitAssetType,
+		conf.InitAssets,
+	)
 
-	// Patch the app 010100
+	// Patch the app v1.1.0
 	apps.Patch(db.Pool(), common.AppName(), "010100",
-		apps.ExecSqlFile("sql/010100.sql"))
+		conf.AddDaytimeAttribute,
+	)
 
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap

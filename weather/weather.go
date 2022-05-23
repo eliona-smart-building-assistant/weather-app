@@ -82,7 +82,7 @@ func CollectData() {
 	}
 }
 
-func upsertHeap[T any](subtype assets.HeapSubtype, assetId int, data T) {
+func upsertHeap[T any](subtype assets.Subtype, assetId int, data T) {
 	var statusHeap assets.Heap[T]
 	statusHeap.Subtype = subtype
 	statusHeap.TimeStamp = time.Now()
