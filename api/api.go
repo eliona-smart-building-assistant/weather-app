@@ -68,6 +68,6 @@ func request(location string) (string, []byte, error) {
 	if err != nil {
 		return url, nil, err
 	}
-	payload, err := http.Read(request, 10, true)
+	payload, err := http.Do(request, 10, true)
 	return url, payload, err
 }

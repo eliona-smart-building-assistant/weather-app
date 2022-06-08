@@ -49,8 +49,8 @@ func main() {
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap
 	// back to the eliona environment.
-	apps.StartServices(
-		apps.LoopService(weather.CollectData, conf.PollingInterval()),
+	apps.WaitFor(
+		apps.Loop(weather.CollectData, conf.PollingInterval()),
 	)
 
 	log.Info("Weather", "Terminate the app.")
