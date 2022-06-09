@@ -14,6 +14,14 @@ github.com/eliona-smart-building-assistant/go-eliona v0.1.9-alpha h1:ntcsXoekke9
 github.com/eliona-smart-building-assistant/go-eliona v0.1.9-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
 github.com/eliona-smart-building-assistant/go-eliona v0.1.10-alpha h1:v+A6BSc8RE5+rPXwEg+JoR/zMGJxj+ZAH7TpzspsF3A=
 github.com/eliona-smart-building-assistant/go-eliona v0.1.10-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.13-alpha h1:VpT4dwvb+pY+e5NUBqnSlUGTY1sbhTGSPqjGgIFen3k=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.13-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.14-alpha h1:S13WQk+/siw+yyzhbLlKxd1geQOOiFQaCq4E0JBiswE=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.14-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.15-alpha h1:r5kHxc/ETCh3UF73oSuflLzC94I0VTUII2tZMFwxxKQ=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.15-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.16-alpha h1:OukJX/tXbHkk/tE8PcshWPGCfe4pYw9Hc1DaEoTdjzo=
+github.com/eliona-smart-building-assistant/go-eliona v0.1.16-alpha/go.mod h1:QQncYaqkqd8PmhPKmnyDIBqPPflwgi0jvUrYPJZSMMo=
 github.com/go-kit/log v0.1.0/go.mod h1:zbhenjAZHb184qTLMA9ZjW7ThYL0H2mk7Q6pNt4vbaY=
 github.com/go-logfmt/logfmt v0.5.0/go.mod h1:wCYkCAKZfumFQihp8CzCvQ3paCTfi41vtzG1KdI/P7A=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=

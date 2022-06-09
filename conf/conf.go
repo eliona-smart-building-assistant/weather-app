@@ -56,8 +56,23 @@ func get(name string, fallback string) string {
 	return value
 }
 
-// Value returns the configuration string referenced by key. The configuration is stored in the init
-// table weather.configuration. This table should be configurable via the eliona frontend.
+// Set sets the value of configuration
 func Set(name string, value string) error {
 	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
+}
+
+func InitConfiguration(connection db.Connection) error {
+	err := Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	if err != nil {
+		return err
+	}
+	err = Set("polling_interval", "10")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func InsertLocation(connection db.Connection, assetId int, location string) error {
+	return db.Exec(connection, "insert into weather.locations (asset_id, location) values ($1, $2)", assetId, location)
 }

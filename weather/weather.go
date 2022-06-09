@@ -24,27 +24,6 @@ import (
 	"weather/conf"
 )
 
-// Input is a structure holds input data getting from the api endpoint. This structure corresponds
-// to the input heap data in eliona.
-type Input struct {
-	Humidity      int     `json:"humidity"`
-	Precipitation int     `json:"precipitation"`
-	Wind          float64 `json:"wind"`
-	Temperature   float64 `json:"temperature"`
-}
-
-// Info is a structure holds informational data getting from the api endpoint. This structure corresponds
-// to the info heap data in eliona.
-type Info struct {
-	Daytime string `json:"daytime"`
-}
-
-// Status is a structure holds data getting from the api endpoint related to state of the weather location.
-// This structure corresponds to the status heap data in eliona.
-type Status struct {
-	Comment string `json:"comment"`
-}
-
 // CollectData reads the defined weather location from configuration and writes the data as eliona heap
 func CollectData() {
 

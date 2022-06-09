@@ -27,7 +27,7 @@ func AddDaytimeAttribute(connection db.Connection) error {
 		AttributeType: "weather",
 		Id:            "daytime",
 		Subtype:       assets.InfoSubtype,
-		Translation:   assets.Translation{German: "Tageszeit", English: "Daytime"},
+		Translation:   &assets.Translation{German: "Tageszeit", English: "Daytime"},
 		Enable:        true,
 	})
 }

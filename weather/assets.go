@@ -13,19 +13,41 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package conf
+package weather
 
 import (
 	"github.com/eliona-smart-building-assistant/go-eliona/assets"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
+	"weather/conf"
 )
+
+// Input is a structure holds input data getting from the api endpoint. This structure corresponds
+// to the input heap data in eliona.
+type Input struct {
+	Humidity      int     `json:"humidity"`
+	Precipitation int     `json:"precipitation"`
+	Wind          float64 `json:"wind"`
+	Temperature   float64 `json:"temperature"`
+}
+
+// Info is a structure holds informational data getting from the api endpoint. This structure corresponds
+// to the info heap data in eliona.
+type Info struct {
+	Daytime string `json:"daytime"`
+}
+
+// Status is a structure holds data getting from the api endpoint related to state of the weather location.
+// This structure corresponds to the status heap data in eliona.
+type Status struct {
+	Comment string `json:"comment"`
+}
 
 // InitAssetType creates asset type for weather locations
 func InitAssetType(connection db.Connection) error {
 	err := assets.UpsertAssetType(connection, assets.AssetType{
 		Id:               "weather_location",
 		Vendor:           "weatherDB by Dron Bhattacharya & Rituraj Datta",
-		Translation:      assets.Translation{German: "Wetterstandort", English: "Weather location"},
+		Translation:      &assets.Translation{German: "Wetterstandort", English: "Weather location"},
 		DocumentationUrl: "https://weatherdbi.herokuapp.com/documentation/v1",
 		Icon:             "weather",
 	})
@@ -38,7 +60,7 @@ func InitAssetType(connection db.Connection) error {
 		AttributeType: "humidity",
 		Id:            "humidity",
 		Subtype:       assets.InputSubtype,
-		Translation:   assets.Translation{German: "Luftfeuchte", English: "Humidity"},
+		Translation:   &assets.Translation{German: "Luftfeuchte", English: "Humidity"},
 		Enable:        true,
 		Unit:          "%",
 	})
@@ -51,7 +73,7 @@ func InitAssetType(connection db.Connection) error {
 		AttributeType: "weather",
 		Id:            "precipitation",
 		Subtype:       assets.InputSubtype,
-		Translation:   assets.Translation{German: "Niederschlag", English: "Precipitation"},
+		Translation:   &assets.Translation{German: "Niederschlag", English: "Precipitation"},
 		Enable:        true,
 		Unit:          "%",
 	})
@@ -64,7 +86,7 @@ func InitAssetType(connection db.Connection) error {
 		AttributeType: "weather",
 		Id:            "wind",
 		Subtype:       assets.InputSubtype,
-		Translation:   assets.Translation{German: "Wind", English: "Wind"},
+		Translation:   &assets.Translation{German: "Wind", English: "Wind"},
 		Enable:        true,
 		Unit:          "km/h",
 	})
@@ -77,7 +99,7 @@ func InitAssetType(connection db.Connection) error {
 		AttributeType: "temperature",
 		Id:            "temperature",
 		Subtype:       assets.InputSubtype,
-		Translation:   assets.Translation{German: "Temperatur", English: "Temperature"},
+		Translation:   &assets.Translation{German: "Temperatur", English: "Temperature"},
 		Enable:        true,
 		Unit:          "°C",
 	})
@@ -90,7 +112,7 @@ func InitAssetType(connection db.Connection) error {
 		AttributeType: "weather",
 		Id:            "comment",
 		Subtype:       assets.StatusSubtype,
-		Translation:   assets.Translation{German: "Kommentar", English: "Comment"},
+		Translation:   &assets.Translation{German: "Kommentar", English: "Comment"},
 		Enable:        true,
 	})
 	if err != nil {
@@ -115,7 +137,7 @@ func InitAssets(connection db.Connection) error {
 	if err != nil {
 		return err
 	}
-	err = insertLocation(connection, id, "winterthur")
+	err = conf.InsertLocation(connection, id, "winterthur")
 	if err != nil {
 		return err
 	}
@@ -132,7 +154,7 @@ func InitAssets(connection db.Connection) error {
 	if err != nil {
 		return err
 	}
-	err = insertLocation(connection, id, "zurich")
+	err = conf.InsertLocation(connection, id, "zurich")
 	if err != nil {
 		return err
 	}
@@ -149,28 +171,12 @@ func InitAssets(connection db.Connection) error {
 	if err != nil {
 		return err
 	}
-	err = insertLocation(connection, id, "bern")
+	err = conf.InsertLocation(connection, id, "bern")
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func InitConfiguration(connection db.Connection) error {
-	err := Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
-	if err != nil {
-		return err
-	}
-	err = Set("polling_interval", "10")
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func insertLocation(connection db.Connection, assetId int, location string) error {
-	return db.Exec(connection, "insert into weather.locations (asset_id, location) values ($1, $2)", assetId, location)
 }
 
 func defaultProjectId(connection db.Connection) string {

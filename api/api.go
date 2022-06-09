@@ -21,6 +21,7 @@ import (
 	"github.com/eliona-smart-building-assistant/go-eliona/http"
 	"strconv"
 	"strings"
+	"time"
 	"weather/conf"
 )
 
@@ -68,6 +69,6 @@ func request(location string) (string, []byte, error) {
 	if err != nil {
 		return url, nil, err
 	}
-	payload, err := http.Do(request, 10, true)
+	payload, err := http.Do(request, time.Second*10, true)
 	return url, payload, err
 }

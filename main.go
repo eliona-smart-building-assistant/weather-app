@@ -35,10 +35,10 @@ func main() {
 
 	// Init the app before the first run.
 	apps.Init(db.Pool(), common.AppName(),
-		apps.ExecSqlFile("conf/init.sql"),
+		apps.ExecSqlFile("conf/schema.sql"),
 		conf.InitConfiguration,
-		conf.InitAssetType,
-		conf.InitAssets,
+		weather.InitAssetType,
+		weather.InitAssets,
 	)
 
 	// Patch the app v1.1.0
