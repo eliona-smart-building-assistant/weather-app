@@ -2,7 +2,7 @@ module weather
 
 go 1.18
 
-require github.com/eliona-smart-building-assistant/go-eliona v0.1.16-alpha
+require github.com/eliona-smart-building-assistant/go-eliona v0.1.21-alpha
 
 require (
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
