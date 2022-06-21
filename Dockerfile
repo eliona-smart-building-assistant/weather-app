@@ -15,7 +15,7 @@
 
 FROM golang:1.18-alpine3.15 AS build
 
-WORKDIR /src
+WORKDIR /
 COPY . ./
 
 RUN go mod download
@@ -24,7 +24,7 @@ RUN go build -o ../app
 FROM alpine:3.15 AS target
 
 COPY --from=build /app ./
-COPY sql ./sql
+COPY conf/*.sql ./conf/
 
 ENV TZ=Europe/Zurich
 CMD [ "/app" ]
