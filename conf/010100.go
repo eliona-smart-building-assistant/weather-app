@@ -25,7 +25,7 @@ func AddDaytimeAttribute(connection db.Connection) error {
 	return assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "weather",
-		Id:            "daytime",
+		Name:          "daytime",
 		Subtype:       assets.InfoSubtype,
 		Translation:   &assets.Translation{German: "Tageszeit", English: "Daytime"},
 		Enable:        true,
