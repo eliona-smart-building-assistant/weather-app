@@ -45,7 +45,7 @@ type Status struct {
 // InitAssetType creates asset type for weather locations
 func InitAssetType(connection db.Connection) error {
 	err := assets.UpsertAssetType(connection, assets.AssetType{
-		Id:               "weather_location",
+		Name:             "weather_location",
 		Vendor:           "weatherDB by Dron Bhattacharya & Rituraj Datta",
 		Translation:      &assets.Translation{German: "Wetterstandort", English: "Weather location"},
 		DocumentationUrl: "https://weatherdbi.herokuapp.com/documentation/v1",
@@ -58,7 +58,7 @@ func InitAssetType(connection db.Connection) error {
 	err = assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "humidity",
-		Id:            "humidity",
+		Name:          "humidity",
 		Subtype:       assets.InputSubtype,
 		Translation:   &assets.Translation{German: "Luftfeuchte", English: "Humidity"},
 		Enable:        true,
@@ -71,7 +71,7 @@ func InitAssetType(connection db.Connection) error {
 	err = assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "weather",
-		Id:            "precipitation",
+		Name:          "precipitation",
 		Subtype:       assets.InputSubtype,
 		Translation:   &assets.Translation{German: "Niederschlag", English: "Precipitation"},
 		Enable:        true,
@@ -84,7 +84,7 @@ func InitAssetType(connection db.Connection) error {
 	err = assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "weather",
-		Id:            "wind",
+		Name:          "wind",
 		Subtype:       assets.InputSubtype,
 		Translation:   &assets.Translation{German: "Wind", English: "Wind"},
 		Enable:        true,
@@ -97,7 +97,7 @@ func InitAssetType(connection db.Connection) error {
 	err = assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "temperature",
-		Id:            "temperature",
+		Name:          "temperature",
 		Subtype:       assets.InputSubtype,
 		Translation:   &assets.Translation{German: "Temperatur", English: "Temperature"},
 		Enable:        true,
@@ -110,7 +110,7 @@ func InitAssetType(connection db.Connection) error {
 	err = assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
 		AssetTypeId:   "weather_location",
 		AttributeType: "weather",
-		Id:            "comment",
+		Name:          "comment",
 		Subtype:       assets.StatusSubtype,
 		Translation:   &assets.Translation{German: "Kommentar", English: "Comment"},
 		Enable:        true,
