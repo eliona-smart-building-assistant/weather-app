@@ -22,13 +22,15 @@ import (
 )
 
 type Location struct {
-	Location string
-	AssetId  int
+	Location  string
+	Latitude  float64
+	Longitude float64
+	ProjectId string
 }
 
 // ReadLocations reads all configured weather locations and send each location to the given channel
 func ReadLocations(locations chan Location) error {
-	return db.Query(db.Pool(), "select location, asset_id from weather.locations", locations)
+	return db.Query(db.Pool(), "select location, latitude, longitude, coalesce(proj_id,'') from weather.locations", locations)
 }
 
 // PollingInterval returns the interval polling the weather api
@@ -39,7 +41,7 @@ func PollingInterval() time.Duration {
 
 // Endpoint returns the configured API endpoint to get weather data.
 func Endpoint() string {
-	return get("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	return get("endpoint", "https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0")
 }
 
 // Value returns the configuration string referenced by key. The configuration is stored in the init
@@ -57,22 +59,10 @@ func get(name string, fallback string) string {
 }
 
 // Set sets the value of configuration
-func Set(name string, value string) error {
-	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
+func Set(connection db.Connection, name string, value string) error {
+	return db.Exec(connection, "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
 }
 
-func InitConfiguration(connection db.Connection) error {
-	err := Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
-	if err != nil {
-		return err
-	}
-	err = Set("polling_interval", "10")
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func InsertLocation(connection db.Connection, assetId int, location string) error {
-	return db.Exec(connection, "insert into weather.locations (asset_id, location) values ($1, $2)", assetId, location)
+func InsertLocation(connection db.Connection, location Location) error {
+	return db.Exec(connection, "insert into weather.locations (location, latitude, longitude) values ($1, $2, $3)", location.Location, location.Latitude, location.Longitude)
 }

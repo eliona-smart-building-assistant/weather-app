@@ -13,21 +13,23 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package conf
+package eliona
 
 import (
-	"github.com/eliona-smart-building-assistant/go-eliona/assets"
+	"github.com/eliona-smart-building-assistant/go-eliona/api"
+	"github.com/eliona-smart-building-assistant/go-eliona/asset"
+	"github.com/eliona-smart-building-assistant/go-eliona/common"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 )
 
 // AddDaytimeAttribute adds a new attribute daytime
-func AddDaytimeAttribute(connection db.Connection) error {
-	return assets.UpsertAssetTypeAttribute(connection, assets.AssetTypeAttribute{
-		AssetTypeId:   "weather_location",
-		AttributeType: "weather",
-		Id:            "daytime",
-		Subtype:       assets.InfoSubtype,
-		Translation:   &assets.Translation{German: "Tageszeit", English: "Daytime"},
-		Enable:        true,
+func AddDaytimeAttribute(db.Connection) error {
+	return asset.UpsertAssetTypeAttribute(api.Attribute{
+		AssetTypeName: common.Ptr("weather_location"),
+		Type:          common.Ptr("weather"),
+		Name:          "daytime",
+		Subtype:       api.INFO,
+		Translation:   &api.Translation{De: common.Ptr("Tageszeit"), En: common.Ptr("Daytime")},
+		Enable:        common.Ptr(true),
 	})
 }
