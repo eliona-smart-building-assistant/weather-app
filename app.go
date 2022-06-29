@@ -13,15 +13,16 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package weather
+package main
 
 import (
-	"github.com/eliona-smart-building-assistant/go-eliona/assets"
-	"github.com/eliona-smart-building-assistant/go-eliona/db"
+	"fmt"
+	"github.com/eliona-smart-building-assistant/go-eliona/api"
+	"github.com/eliona-smart-building-assistant/go-eliona/asset"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
-	"time"
-	"weather/api"
 	"weather/conf"
+	"weather/eliona"
+	"weather/weather"
 )
 
 // CollectData reads the defined weather location from configuration and writes the data as eliona heap
@@ -33,8 +34,26 @@ func CollectData() {
 	}()
 	for location := range locations {
 
+		// Check if eliona project is defined; if not, ignore this location
+		if len(location.ProjectId) == 0 {
+			log.Warn("Weather", "Ignoring location, because no project id is defined: %s", location.Location)
+			continue
+		}
+
+		// Create or update asset and get ID
+		assetId, err := asset.UpsertAsset(api.Asset{
+			ProjectId:             location.ProjectId,
+			GlobalAssetIdentifier: fmt.Sprintf("%s %f %f", location.Location, location.Latitude, location.Longitude),
+			Description:           &location.Location,
+			Name:                  &location.Location,
+			Latitude:              &location.Latitude,
+			Longitude:             &location.Longitude,
+			AssetType:             "weather_location",
+		})
+		log.Debug("Weather", "Determining asset id %d for location '%s'", *assetId, location.Location)
+
 		// Reads the current weather condition for location
-		condition, err := api.Today(location)
+		condition, err := weather.Today(location)
 		if err != nil {
 			log.Error("Weather", "Error during requesting API endpoint: %v", err)
 			return
@@ -42,7 +61,7 @@ func CollectData() {
 		log.Debug("Weather", "New condition for location '%s' found: %s", location.Location, condition.Comment)
 
 		// Writes input data as heap
-		upsertHeap(assets.InputSubtype, location.AssetId, Input{
+		eliona.UpsertHeap(api.INPUT, *assetId, eliona.Input{
 			Temperature:   condition.Temperature,
 			Wind:          condition.Wind,
 			Humidity:      condition.Humidity,
@@ -50,26 +69,13 @@ func CollectData() {
 		})
 
 		// Writes info data as heap
-		upsertHeap(assets.InfoSubtype, location.AssetId, Info{
+		eliona.UpsertHeap(api.INFO, *assetId, eliona.Info{
 			Daytime: condition.Daytime,
 		})
 
 		// Writes status data as heap
-		upsertHeap(assets.StatusSubtype, location.AssetId, Status{
+		eliona.UpsertHeap(api.STATUS, *assetId, eliona.Status{
 			Comment: condition.Comment,
 		})
-	}
-}
-
-func upsertHeap[T any](subtype assets.Subtype, assetId int, data T) {
-	var statusHeap assets.Heap[T]
-	statusHeap.Subtype = subtype
-	statusHeap.TimeStamp = time.Now()
-	statusHeap.AssetId = assetId
-	statusHeap.Data = data
-	err := assets.UpsertHeap(db.Pool(), statusHeap)
-	if err != nil {
-		log.Error("Weather", "Error during writing heap: %v", err)
-		return
 	}
 }

@@ -36,5 +36,7 @@ create table if not exists weather.configuration
 create table if not exists weather.locations
 (
     location text not null,
-    asset_id integer unique references public.asset(asset_id) on delete cascade primary key
+    latitude double precision,
+    longitude double precision,
+    proj_id text
 );

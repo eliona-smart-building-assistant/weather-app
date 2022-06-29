@@ -16,12 +16,12 @@
 package main
 
 import (
-	"github.com/eliona-smart-building-assistant/go-eliona/apps"
+	"github.com/eliona-smart-building-assistant/go-eliona/app"
 	"github.com/eliona-smart-building-assistant/go-eliona/common"
 	"github.com/eliona-smart-building-assistant/go-eliona/db"
 	"github.com/eliona-smart-building-assistant/go-eliona/log"
 	"weather/conf"
-	"weather/weather"
+	"weather/eliona"
 )
 
 // The main function starts the app by starting all services necessary for this app and waits
@@ -34,23 +34,23 @@ func main() {
 	defer db.ClosePool()
 
 	// Init the app before the first run.
-	apps.Init(db.Pool(), common.AppName(),
-		apps.ExecSqlFile("conf/schema.sql"),
+	app.Init(db.Pool(), common.AppName(),
+		app.ExecSqlFile("conf/init.sql"),
 		conf.InitConfiguration,
-		weather.InitAssetType,
-		weather.InitAssets,
+		conf.InitLocations,
+		eliona.InitAssetType,
 	)
 
 	// Patch the app v1.1.0
-	apps.Patch(db.Pool(), common.AppName(), "010100",
-		conf.AddDaytimeAttribute,
+	app.Patch(db.Pool(), common.AppName(), "010100",
+		eliona.AddDaytimeAttribute,
 	)
 
 	// Starting the service for the weather app. Normally one app has only one service. In case of the
 	// weather app, the service reads weather data for configurable locations and write this data as heap
 	// back to the eliona environment.
-	apps.WaitFor(
-		apps.Loop(weather.CollectData, conf.PollingInterval()),
+	common.WaitFor(
+		common.Loop(CollectData, conf.PollingInterval()),
 	)
 
 	log.Info("Weather", "Terminate the app.")

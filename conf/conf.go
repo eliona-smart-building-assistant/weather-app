@@ -23,14 +23,14 @@ import (
 
 type Location struct {
 	Location  string
-	AssetId   int
 	Latitude  float64
 	Longitude float64
+	ProjectId string
 }
 
 // ReadLocations reads all configured weather locations and send each location to the given channel
 func ReadLocations(locations chan Location) error {
-	return db.Query(db.Pool(), "select locations.location, locations.asset_id, lat, lon from weather.locations join public.asset using (asset_id)", locations)
+	return db.Query(db.Pool(), "select location, latitude, longitude, coalesce(proj_id,'') from weather.locations", locations)
 }
 
 // PollingInterval returns the interval polling the weather api
@@ -59,22 +59,10 @@ func get(name string, fallback string) string {
 }
 
 // Set sets the value of configuration
-func Set(name string, value string) error {
-	return db.Exec(db.Pool(), "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
+func Set(connection db.Connection, name string, value string) error {
+	return db.Exec(connection, "insert into weather.configuration (name, value) values ($1, $2) on conflict (name) do update set value = excluded.value", name, value)
 }
 
-func InitConfiguration(connection db.Connection) error {
-	err := Set("endpoint", "https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0")
-	if err != nil {
-		return err
-	}
-	err = Set("polling_interval", "10")
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func InsertLocation(connection db.Connection, assetId int, location string) error {
-	return db.Exec(connection, "insert into weather.locations (asset_id, location) values ($1, $2)", assetId, location)
+func InsertLocation(connection db.Connection, location Location) error {
+	return db.Exec(connection, "insert into weather.locations (location, latitude, longitude) values ($1, $2, $3)", location.Location, location.Latitude, location.Longitude)
 }

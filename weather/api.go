@@ -13,7 +13,7 @@
 //  DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-package api
+package weather
 
 import (
 	"encoding/json"
@@ -25,12 +25,12 @@ import (
 
 // Conditions holds the current weather condition for the current day
 type Conditions struct {
-	Humidity      int
-	Precipitation int
-	Wind          float64
-	Temperature   float64
-	Comment       string
-	Daytime       string
+	Humidity      int     `json:"humidity"`
+	Precipitation int     `json:"precipitation"`
+	Wind          float64 `json:"wind"`
+	Temperature   float64 `json:"temperature"`
+	Comment       string  `json:"comment"`
+	Daytime       string  `json:"daytime"`
 }
 
 // Today returns the current weather conditions for the given latitude and longitude.
