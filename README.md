@@ -17,7 +17,14 @@ The `APPNAME` MUST be set to `weather`. Some resources use this name to identify
 export APPNAME=weather # For running in eliona environment set app name in Dockerfile
 ```
 
-The `CONNECTION_STRING` variable configures the [eliona database](https://github.com/eliona-smart-building-assistant/go-eliona/tree/main/db). If the app runs as a Docker container inside an eliona environment this variable is already set by the environment. If you run the app outside you must provide this variable. Otherwise the app can't be initialized and started. 
+The `API_ENDPOINT` variable configures the [Eliona Api](https://github.com/eliona-smart-building-assistant/go-eliona/tree/main/api). If the app runs as a Docker container inside an eliona environment this variable is already set by the environment. If you run the app outside you must provide this variable. Otherwise the app can't be initialized and started.
+
+```bash
+export API_ENDPOINT=https://api.eliona.io/v2 # only if run outside eliona environment
+```
+
+
+The `CONNECTION_STRING` variable configures the [Eliona database](https://github.com/eliona-smart-building-assistant/go-eliona/tree/main/db). If the app runs as a Docker container inside an eliona environment this variable is already set by the environment. If you run the app outside you must provide this variable. Otherwise the app can't be initialized and started. 
 
 ```bash
 export CONNECTION_STRING=postgres://user:pass@localhost::5432/iot # only if run outside eliona environment
@@ -42,15 +49,8 @@ In detail, you need the following configuration data in table `weather.configura
 ('endpoint', 'https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0') -- where is the API located
 ('polling_interval', '10') -- with interval in seconds is used to poll the API 
 ```
-
-In order to define the weather locations for which conditions are to be read, an entry in the table `weather.locations (location, asset_id)` is required. The location is the name of the location, e.g. `winterthur,swizerland` or if clearly just `winterthur`. Each location is mapped with an asset in eliona, represented by the `asset_id`.
-
-Before the locations can be inserted the corresponding asset have to create. The id of this can now use to configure the location.
-
-```sql
--- weather.locations (location, asset_id)
-('winterthur', 4711) -- define Winterthur as location and map with eliona asset 4711
-```
+    
+In order to define the weather locations for which conditions are to be read, an entry in the table `weather.locations (location, latitude, longitude, proj_id)` is required. The location is the name of the location, e.g. `winterthur,swizerland` or if clearly just `winterthur`. Each location is later mapped with an asset in eliona.
 
 ## API Reference
 
