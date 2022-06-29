@@ -1,7 +1,7 @@
 # Weather app
 The [weather app](https://github.com/eliona-smart-building-assistant/weather-app) is an exemplary app build for running within an [eliona](https://www.eliona.io/) environment. Apps like this add new features to eliona like supporting additional sensors or open new communication channels.
 
-This app grabs weather data from [WeatherDB](https://weatherdbi.herokuapp.com/) web service this data to eliona. To do this, you can configure locations for which the weather data is to be read. Within eliona these locations are handled as assets and can be used to show on dashboards, trigger alarms and so on.
+This app grabs weather data from [7timer](https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0) web service this data to eliona. To do this, you can configure locations for which the weather data is to be read. Within eliona these locations are handled as assets and can be used to show on dashboards, trigger alarms and so on.
 
 [<img src="weather-app.png" width="350"/>](weather-app.png)
 
@@ -39,8 +39,8 @@ In detail, you need the following configuration data in table `weather.configura
 
 ```sql
 -- weather.configuration (name, value)
-('endpoint', 'https://weatherdbi.herokuapp.com/data/weather/') -- where is the weatherDB located
-('polling_interval', '10') -- with interval in seconds is used to poll the weatherDB 
+('endpoint', 'https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0') -- where is the API located
+('polling_interval', '10') -- with interval in seconds is used to poll the API 
 ```
 
 In order to define the weather locations for which conditions are to be read, an entry in the table `weather.locations (location, asset_id)` is required. The location is the name of the location, e.g. `winterthur,swizerland` or if clearly just `winterthur`. Each location is mapped with an asset in eliona, represented by the `asset_id`.
@@ -54,7 +54,7 @@ Before the locations can be inserted the corresponding asset have to create. The
 
 ## API Reference
 
-The weather app grabs weather conditions from [WeatherDB](https://weatherdbi.herokuapp.com/) web service and writes these data to eliona as heap data of assets. The heap data is separated in `weather.Input`, `weather.Info` and `weather.Status` heaps. These structures are used to write the heap data.
+The weather app grabs weather conditions from [7timer](https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0) web service and writes these data to eliona as heap data of assets. The heap data is separated in `weather.Input`, `weather.Info` and `weather.Status` heaps. These structures are used to write the heap data.
 
 ```json
 {"wind": 6, "humidity": 97, "temperature": 18, "precipitation": 15} 

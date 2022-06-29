@@ -46,9 +46,9 @@ type Status struct {
 func InitAssetType(connection db.Connection) error {
 	err := assets.UpsertAssetType(connection, assets.AssetType{
 		Name:             "weather_location",
-		Vendor:           "weatherDB by Dron Bhattacharya & Rituraj Datta",
+		Vendor:           "7Timer!",
 		Translation:      &assets.Translation{German: "Wetterstandort", English: "Weather location"},
-		DocumentationUrl: "https://weatherdbi.herokuapp.com/documentation/v1",
+		DocumentationUrl: "https://www.7timer.info/doc.php?lang=en#api",
 		Icon:             "weather",
 	})
 	if err != nil {

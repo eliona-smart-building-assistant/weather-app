@@ -34,7 +34,7 @@ func CollectData() {
 	for location := range locations {
 
 		// Reads the current weather condition for location
-		condition, err := api.Today(location.Location)
+		condition, err := api.Today(location)
 		if err != nil {
 			log.Error("Weather", "Error during requesting API endpoint: %v", err)
 			return

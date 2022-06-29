@@ -19,8 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/eliona-smart-building-assistant/go-eliona/http"
-	"strconv"
-	"strings"
 	"time"
 	"weather/conf"
 )
@@ -36,7 +34,7 @@ type Conditions struct {
 }
 
 // Today returns the current weather conditions for the given latitude and longitude.
-func Today(location string) (Conditions, error) {
+func Today(location conf.Location) (Conditions, error) {
 	var conditions Conditions
 
 	// Request the API to get current conditions conditions
@@ -53,18 +51,17 @@ func Today(location string) (Conditions, error) {
 	if ok && status == "fail" {
 		return conditions, fmt.Errorf("error requesting api %s: %s", url, result["message"].(string))
 	}
-	conditions.Temperature, _ = result["currentConditions"].(map[string]interface{})["temp"].(map[string]interface{})["c"].(float64)
-	conditions.Precipitation, _ = strconv.Atoi(strings.Replace(result["currentConditions"].(map[string]interface{})["precip"].(string), "%", "", -1))
-	conditions.Humidity, _ = strconv.Atoi(strings.Replace(result["currentConditions"].(map[string]interface{})["humidity"].(string), "%", "", -1))
-	conditions.Wind, _ = result["currentConditions"].(map[string]interface{})["wind"].(map[string]interface{})["km"].(float64)
-	conditions.Comment, _ = result["currentConditions"].(map[string]interface{})["comment"].(string)
-	conditions.Daytime, _ = result["currentConditions"].(map[string]interface{})["dayhour"].(string)
+	conditions.Temperature, _ = result["dataseries"].([]interface{})[0].(map[string]interface{})["temp2m"].(map[string]interface{})["max"].(float64)
+	conditions.Wind, _ = result["dataseries"].([]interface{})[0].(map[string]interface{})["wind10m_max"].(float64)
+	conditions.Comment, _ = result["dataseries"].([]interface{})[0].(map[string]interface{})["weather"].(string)
+	date, _ := result["dataseries"].([]interface{})[0].(map[string]interface{})["date"].(float64)
+	conditions.Daytime = fmt.Sprintf("%0.0f", date)
 	return conditions, nil
 }
 
 // request calls the api to get structured weather data
-func request(location string) (string, []byte, error) {
-	url := fmt.Sprintf(conf.Endpoint()+"%s", location)
+func request(location conf.Location) (string, []byte, error) {
+	url := fmt.Sprintf(conf.Endpoint()+"&lon=%f&lat=%f", location.Longitude, location.Latitude)
 	request, err := http.NewRequest(url)
 	if err != nil {
 		return url, nil, err

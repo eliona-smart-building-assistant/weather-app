@@ -22,13 +22,15 @@ import (
 )
 
 type Location struct {
-	Location string
-	AssetId  int
+	Location  string
+	AssetId   int
+	Latitude  float64
+	Longitude float64
 }
 
 // ReadLocations reads all configured weather locations and send each location to the given channel
 func ReadLocations(locations chan Location) error {
-	return db.Query(db.Pool(), "select location, asset_id from weather.locations", locations)
+	return db.Query(db.Pool(), "select locations.location, locations.asset_id, lat, lon from weather.locations join public.asset using (asset_id)", locations)
 }
 
 // PollingInterval returns the interval polling the weather api
@@ -39,7 +41,7 @@ func PollingInterval() time.Duration {
 
 // Endpoint returns the configured API endpoint to get weather data.
 func Endpoint() string {
-	return get("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	return get("endpoint", "https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0")
 }
 
 // Value returns the configuration string referenced by key. The configuration is stored in the init
@@ -62,7 +64,7 @@ func Set(name string, value string) error {
 }
 
 func InitConfiguration(connection db.Connection) error {
-	err := Set("endpoint", "https://weatherdbi.herokuapp.com/data/weather/")
+	err := Set("endpoint", "https://www.7timer.info/bin/civillight.php?ac=0&unit=metric&output=json&tzshift=0")
 	if err != nil {
 		return err
 	}
