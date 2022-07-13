@@ -18,8 +18,8 @@ package eliona
 import (
 	"github.com/eliona-smart-building-assistant/go-eliona/api"
 	"github.com/eliona-smart-building-assistant/go-eliona/asset"
-	"github.com/eliona-smart-building-assistant/go-eliona/common"
-	"github.com/eliona-smart-building-assistant/go-eliona/db"
+	"github.com/eliona-smart-building-assistant/go-utils/common"
+	"github.com/eliona-smart-building-assistant/go-utils/db"
 )
 
 // AddDaytimeAttribute adds a new attribute daytime

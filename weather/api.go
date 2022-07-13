@@ -18,7 +18,7 @@ package weather
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/eliona-smart-building-assistant/go-eliona/http"
+	"github.com/eliona-smart-building-assistant/go-utils/http"
 	"time"
 	"weather/conf"
 )
