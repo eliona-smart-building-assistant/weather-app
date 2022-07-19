@@ -3,7 +3,8 @@ module weather
 go 1.18
 
 require (
-	github.com/eliona-smart-building-assistant/go-eliona v1.3.2
+	github.com/eliona-smart-building-assistant/go-eliona v1.4.0
+	github.com/eliona-smart-building-assistant/go-eliona-api-client v1.0.0
 	github.com/eliona-smart-building-assistant/go-utils v1.0.0
 )
 
@@ -20,8 +21,8 @@ require (
 	github.com/jackc/puddle v1.2.2-0.20220404125616-4e959849469a // indirect
 	golang.org/x/crypto v0.0.0-20220511200225-c6db032c6c88 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
-	golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421 // indirect
+	golang.org/x/oauth2 v0.0.0-20210323180902-22b0adad7558 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/appengine v1.4.0 // indirect
+	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 )

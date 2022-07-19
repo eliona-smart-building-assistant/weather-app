@@ -17,7 +17,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/eliona-smart-building-assistant/go-eliona/api"
+	api "github.com/eliona-smart-building-assistant/go-eliona-api-client"
 	"github.com/eliona-smart-building-assistant/go-eliona/asset"
 	"github.com/eliona-smart-building-assistant/go-utils/log"
 	"weather/conf"
