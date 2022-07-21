@@ -24,7 +24,7 @@ import (
 
 // AddDaytimeAttribute adds a new attribute daytime
 func AddDaytimeAttribute(db.Connection) error {
-	return asset.UpsertAssetTypeAttribute(api.Attribute{
+	return asset.UpsertAssetTypeAttribute(api.AssetTypeAttribute{
 		AssetTypeName: common.Ptr("weather_location"),
 		Type:          common.Ptr("weather"),
 		Name:          "daytime",

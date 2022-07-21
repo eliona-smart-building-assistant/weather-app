@@ -54,7 +54,7 @@ func InitAssetType(db.Connection) error {
 		Translation: &api.Translation{De: common.Ptr("Wetterstandort"), En: common.Ptr("Weather location")},
 		Urldoc:      common.Ptr("https://www.7timer.info/doc.php?lang=en#api"),
 		Icon:        common.Ptr("weather"),
-		Attributes: []api.Attribute{
+		Attributes: []api.AssetTypeAttribute{
 			{
 				Type:        common.Ptr("humidity"),
 				Name:        "humidity",
